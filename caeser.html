@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App using Socket IO and Node JS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <h1 class="font-bold text-green-500 text-3xl text-center mt-5">Chat Application</h1>
+    <form class="flex flex-col justify-center items-center mt-5" id="form">
+        <input class="border border-gray-400 rounded-md mt-5 p-1" type="text" placeholder="Name" id="myname">
+        <input class="border border-gray-400 rounded-md mt-5 p-1" type="text" placeholder="Message" id="message">
+        <button class="bg-blue-500 rounded-md p-2 text-white mt-5" type="submit">Send</button>
+    </form>
+    <div class="flex flex-col justify-center items-center mt-5" id="messageArea"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const myname = document.getElementById('myname');
+        const message = document.getElementById('message');
+        const messageArea = document.getElementById("messageArea");
+
+        // Load existing messages when a new user connects
+        socket.on("load messages", (messages) => {
+            messages.forEach(data => {
+                const chatContent = document.createElement("p");
+                chatContent.textContent = `${data.username}: ${data.message}`;
+                messageArea.appendChild(chatContent);
+            });
+        });
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            if (message.value && myname.value) {
+                const chatData = {
+                    username: myname.value,
+                    message: message.value
+                };
+                socket.emit('send message', chatData);
+                message.value = ""; // Clear message input
+            }
+        });
+
+        socket.on("receive message", (data) => {
+            const chatContent = document.createElement("p");
+            chatContent.textContent = `${data.username}: ${data.message}`;
+            messageArea.appendChild(chatContent);
+        });
+    </script>
+</body>
+
+</html>
