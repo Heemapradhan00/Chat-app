@@ -11,20 +11,12 @@ Node.js Backend: A Node.js server handles message broadcasting and routing.
 Getting Started
 
 Clone the Repository:
-
-Bash
-
 git clone https://github.com/Heemapradhan00/Chat-app.git
 Install Dependencies:
-
-Bash
 
 cd Chat-app
 npm install
 Start the Server:
-
-Bash
-
 node server.js
 Open the Chat:
 Open the caeser.html file in your web browser.
